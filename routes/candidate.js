@@ -9,6 +9,7 @@ const {
   updateCandidate,
   deleteCandidate,
   candidateLogin,
+  addCandidateResume,
 } = require("../controllers/candidate");
 
 router.route("/").get(getCandidates).post(addCandidate);
@@ -19,6 +20,7 @@ router
   .put(updateCandidate)
   .delete(deleteCandidate);
 
+router.route("/addresume/:id").post(addCandidateResume);
 router.route("/login").post(candidateLogin);
 
 module.exports = router;

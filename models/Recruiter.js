@@ -51,7 +51,12 @@ RecruiterSchema.methods.getSignedJwtToken = function () {
 
 // Match user entered password to hashed password in database
 RecruiterSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+  return bcrypt.compare(enteredPassword, this.password, () => {
+    try {
+    } catch (error) {
+      console.log(error);
+    }
+  });
 };
 
 module.exports = mongoose.model("Recruiter", RecruiterSchema);

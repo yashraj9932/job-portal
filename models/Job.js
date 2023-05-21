@@ -24,7 +24,6 @@ const JobSchema = new mongoose.Schema({
   submissions: {
     type: [mongoose.Schema.ObjectId],
     ref: "Candidate",
-    required: true,
   },
 });
 

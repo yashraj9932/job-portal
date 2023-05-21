@@ -6,7 +6,6 @@ const Recruiter = require("../models/Recruiter");
 // Protect routes
 exports.protect = asyncHandler(async (req, res, next) => {
   let token;
-
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -15,10 +14,6 @@ exports.protect = asyncHandler(async (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
 
-  //   // Set token from cookie
-  //   else if (req.cookies.token) {
-  //     token = req.cookies.token;
-  //   }
   // Make sure token exists
   if (!token) {
     return next(new ErrorResponse("Not authorized to access this route", 401));

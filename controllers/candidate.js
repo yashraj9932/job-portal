@@ -1,5 +1,6 @@
 const Candidate = require("../models/Candidate");
 const ErrorResponse = require("../utils/errorResponse");
+const path = require("path");
 
 const asyncHandler = require("../middleware/async");
 
@@ -105,7 +106,6 @@ exports.deleteCandidate = asyncHandler(async (req, res, next) => {
 
 exports.candidateLogin = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
-  // #swagger.tags=['Candidate']
 
   if (!email || !password) {
     return next(new ErrorResponse("Please provide an email and password", 404));
@@ -119,12 +119,48 @@ exports.candidateLogin = asyncHandler(async (req, res, next) => {
   }
 
   //Check is password matches
-  const isMatch = await candidate.matchPassword(password);
-
+  const isMatch = candidate.matchPassword(password);
   if (!isMatch) {
     return next(new ErrorResponse("Invalid Credentials", 401));
   }
   sendTokenResponse(candidate, 200, res);
+});
+
+exports.addCandidateResume = asyncHandler(async (req, res, next) => {
+  if (!req.files) {
+    return next(new ErrorResponse(`Please upload a file`, 400));
+  }
+  const file = req.files.file;
+
+  // Make sure the image is a pdf or docx
+  if (!file.mimetype.startsWith("application")) {
+    return next(new ErrorResponse(`Please upload file in correct format`, 400));
+  }
+
+  // Create custom filename
+  file.name = `pdf_${req.params.id}${path.parse(file.name).ext}`;
+
+  file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async (err) => {
+    if (err) {
+      console.error(err);
+      return next(new ErrorResponse(`Problem with file upload`, 500));
+    }
+
+    const candidate = await Candidate.findByIdAndUpdate(
+      req.params.id,
+      {
+        resume: file.name,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    res.status(200).json({
+      success: true,
+      candidate,
+    });
+  });
 });
 
 const sendTokenResponse = (candidate, statusCode, res) => {

@@ -42,7 +42,6 @@ const CandidateSchema = new mongoose.Schema({
   },
   resume: {
     type: String,
-    required: [true, "Please add a resume"],
   },
   skills: {
     type: [String],
@@ -69,7 +68,14 @@ CandidateSchema.methods.getSignedJwtToken = function () {
 
 // Match user entered password to hashed password in database
 CandidateSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+  console.log(enteredPassword, this.password);
+
+  return bcrypt.compare(enteredPassword, this.password, () => {
+    try {
+    } catch (error) {
+      console.log(error);
+    }
+  });
 };
 
 module.exports = mongoose.model("Candidate", CandidateSchema);
