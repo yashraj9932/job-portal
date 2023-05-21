@@ -39,7 +39,9 @@ exports.addCandidate = asyncHandler(async (req, res, next) => {
 //@Acess   Private/Admin
 
 exports.getCandidate = asyncHandler(async (req, res, next) => {
-  const candidate = await Candidate.findById(req.params.id);
+  const candidate = await Candidate.findById(req.params.id).populate({
+    path: "jobsApplied.job",
+  });
 
   // #swagger.tags=['Candidate']
 

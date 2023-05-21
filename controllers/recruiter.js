@@ -23,7 +23,12 @@ exports.addRecruiter = asyncHandler(async (req, res, next) => {
 });
 
 exports.getRecruiter = asyncHandler(async (req, res, next) => {
-  const recruiter = await Recruiter.findById(req.params.id);
+  const recruiter = await Recruiter.findById(req.params.id).populate({
+    path: "jobs",
+    populate: {
+      path: "submissions",
+    },
+  });
 
   if (!recruiter) {
     return next(
