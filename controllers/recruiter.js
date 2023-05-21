@@ -24,7 +24,6 @@ exports.addRecruiter = asyncHandler(async (req, res, next) => {
 
 exports.getRecruiter = asyncHandler(async (req, res, next) => {
   const recruiter = await Recruiter.findById(req.params.id);
-  // #swagger.tags=['Recruiter / Student']
 
   if (!recruiter) {
     return next(
@@ -43,7 +42,6 @@ exports.getRecruiter = asyncHandler(async (req, res, next) => {
 
 exports.updateRecruiter = asyncHandler(async (req, res, next) => {
   const fieldsToUpdate = {};
-  // #swagger.tags=['Recruiter / Student']
 
   if (req.body.name) {
     fieldsToUpdate.name = req.body.name;
@@ -69,7 +67,6 @@ exports.updateRecruiter = asyncHandler(async (req, res, next) => {
 
 exports.deleteRecruiter = asyncHandler(async (req, res, next) => {
   await Recruiter.findByIdAndDelete(req.params.id);
-  // #swagger.tags=['Recruiter / Student']
 
   res.status(200).json({
     success: true,

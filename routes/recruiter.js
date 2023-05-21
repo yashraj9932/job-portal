@@ -11,10 +11,6 @@ const {
   recruiterLogin,
 } = require("../controllers/recruiter");
 
-// const assignmentRouter = require("./assigment");
-
-// router.use("/:recruiterid/assignment", assignmentRouter);
-
 router.route("/").get(getRecruiters).post(addRecruiter);
 
 router
